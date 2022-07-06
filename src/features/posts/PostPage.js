@@ -1,37 +1,44 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { Spinner } from '../../components/Spinner'
-import { useGetPostQuery } from '../api/apiSlice'
+import { useDeletePostMutation, useGetPostQuery } from '../posts/postsSlice'
 
-import { PostAuthor } from './PostAuthor'
-import { TimeAgo } from './TimeAgo'
-import { ReactionButtons } from './ReactionButtons'
-
-export const SinglePostPage = ({ match }) => {
-  const { postId } = match.params
+export const PostPage = ({ match }) => {
+  const { postId } = useParams()
 
   const { data: post, isFetching, isSuccess } = useGetPostQuery(postId)
 
-  let content
+  const [deletePost, { isLoading }] = useDeletePostMutation()
+
+  const navigate = useNavigate()
+
+  const onDeletePostClicked = async () => {
+    if (!isLoading) {
+      try {
+        await deletePost(postId).unwrap()
+        navigate('/posts')
+      } catch (err) {
+        console.error('Failed to delete the post: ', err)
+      }
+    }
+  }
+
+  let body
   if (isFetching) {
-    content = <Spinner text="Loading..." />
+    body = <Spinner text="Loading..." />
   } else if (isSuccess) {
-    content = (
+    body = (
       <article className="post">
         <h2>{post.title}</h2>
-        <div>
-          <PostAuthor userId={post.user} />
-          <TimeAgo timestamp={post.date} />
-        </div>
-        <p className="post-content">{post.content}</p>
-        <ReactionButtons post={post} />
-        <Link to={`/editPost/${post.id}`} className="button">
+        <p className="post-content">{post.body}</p>
+        <Link to={`/posts/${post.id}/edit`} className="button">
           Edit Post
         </Link>
+        <button className="button" onClick={onDeletePostClicked}>Delete</button>
       </article>
     )
   }
 
-  return <section>{content}</section>
+  return <section>{body}</section>
 }

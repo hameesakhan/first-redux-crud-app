@@ -35,6 +35,14 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }],
         }),
+        deletePost: builder.mutation({
+            query: (postId) => ({
+                url: `posts/${postId}`,
+                method: 'DELETE',
+                body: undefined,
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }],
+        }),
     }),
 })
 
@@ -42,7 +50,8 @@ export const {
     useGetPostsQuery,
     useGetPostQuery,
     useAddNewPostMutation,
-    useEditPostMutation
+    useEditPostMutation,
+    useDeletePostMutation
 } = extendedApiSlice
 
 // Calling `someEndpoint.select(someArg)` generates a new selector that will return
