@@ -18,6 +18,11 @@ import { PostCreate } from './features/posts/PostCreate';
 import { PostEdit } from './features/posts/PostEdit';
 import { PostPage } from './features/posts/PostPage';
 
+import { TodosList } from './features/todos/TodoList';
+import { TodoCreate } from './features/todos/TodoCreate';
+import { TodoPage } from './features/todos/TodoPage';
+import { TodoEdit } from './features/todos/TodoEdit';
+
 function App() {
   return (
     <div className="App">
@@ -35,6 +40,11 @@ function App() {
               <Route exact path="/posts/create" element={<PostCreate />} />
               <Route exact path="/posts/:postId" element={<PostPage />} />
               <Route exact path="/posts/:postId/edit" element={<PostEdit />} />
+
+              <Route exact path="/todos" element={<TodosList />} />
+              <Route exact path="/todos/create" element={<TodoCreate />} />
+              <Route exact path="/todos/:todoId" element={<TodoPage />} />
+              <Route exact path="/todos/:todoId/edit" element={<TodoEdit />} />
             </Switch>
           </div>
         </Router>

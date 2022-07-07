@@ -7,7 +7,7 @@ import { useGetUserQuery, useEditUserMutation } from '../users/usersSlice'
 export const UserEdit = () => {
   const { userId } = useParams()
 
-  const { data: user = { name: 'Loading...', username: 'Loading...', email: 'Loading...' }, isFetching, isSuccess } = useGetUserQuery(userId)
+  const { data: user = { name: 'Loading...', username: 'Loading...', email: 'Loading...' }, isFetching } = useGetUserQuery(userId)
 
   const [name, setName] = useState(user.name)
   const [username, setUsername] = useState(user.username)

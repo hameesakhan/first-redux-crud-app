@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import { Spinner } from '../../components/Spinner'
-import { selectAllUsers, useAddNewUserMutation } from '../users/usersSlice'
+import { useAddNewUserMutation } from '../users/usersSlice'
 
 export const UserCreate = () => {
     const [name, setName] = useState('')

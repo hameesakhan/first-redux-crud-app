@@ -21,7 +21,6 @@ export const PostsList = () => {
     const {
         data: posts = [],
         isLoading,
-        isFetching,
         isSuccess,
         isError,
         error,
