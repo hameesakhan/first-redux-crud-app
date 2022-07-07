@@ -10,10 +10,15 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getPosts: builder.query({
             query: () => '/posts',
-            providesTags: (result = [], error, arg) => [
-                'Post',
-                ...result.map(({ id }) => ({ type: 'Post', id })),
-            ],
+            transformResponse: (res) => {
+                return postsAdapter.setAll(initialState, res)
+            },
+            providesTags: (result = [], error, arg) => {
+                return [
+                    'Post',
+                    ...result.ids.map((id) => ({ type: 'Post', id })),
+                ]
+            },
         }),
         getPost: builder.query({
             query: (postId) => `/posts/${postId}`,
@@ -25,7 +30,9 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: initialPost,
             }),
-            invalidatesTags: ['Post'],
+            transformResponse: (res) => {
+                return postsAdapter.addOne(initialState, res)
+            }
         }),
         editPost: builder.mutation({
             query: (post) => ({
@@ -41,7 +48,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
                 body: undefined,
             }),
-            invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }],
+            invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg }],
         }),
     }),
 })
