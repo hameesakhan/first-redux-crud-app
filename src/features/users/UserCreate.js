@@ -2,68 +2,66 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Spinner } from '../../components/Spinner'
-import { useAddNewPostMutation } from '../api/apiSlice'
-import { selectAllUsers } from '../users/usersSlice'
+import { selectAllUsers, useAddNewUserMutation } from '../users/usersSlice'
 
-export const AddPostForm = () => {
-    const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
-    const [userId, setUserId] = useState('')
+export const UserCreate = () => {
+    const [name, setName] = useState('')
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
 
-    const [addNewPost, { isLoading }] = useAddNewPostMutation()
-    const users = useSelector(selectAllUsers)
+    const [addNewUser, { isLoading }] = useAddNewUserMutation()
 
-    const onTitleChanged = (e) => setTitle(e.target.value)
-    const onContentChanged = (e) => setContent(e.target.value)
-    const onAuthorChanged = (e) => setUserId(e.target.value)
+    const onNameChanged = (e) => setName(e.target.value)
+    const onUsernameChanged = (e) => setUsername(e.target.value)
+    const onEmailChanged = (e) => setEmail(e.target.value)
 
-    const canSave = [title, content, userId].every(Boolean) && !isLoading
+    const canSave = [name, username, email].every(Boolean) && !isLoading
 
-    const onSavePostClicked = async () => {
+    const onSaveUserClicked = async () => {
         if (canSave) {
             try {
-                await addNewPost({ title, content, user: userId }).unwrap()
-                setTitle('')
-                setContent('')
-                setUserId('')
+                await addNewUser({ name, username, email }).unwrap()
+                setName('')
+                setUsername('')
+                setEmail('')
             } catch (err) {
                 console.error('Failed to save the post: ', err)
             }
         }
     }
 
-    const usersOptions = users.map((user) => (
-        <option key={user.id} value={user.id}>
-            {user.name}
-        </option>
-    ))
-
     const spinner = isLoading ? <Spinner size="30px" /> : null
 
     return (
         <section>
-            <h2>Add a New Post</h2>
+            <h2>Add a New User</h2>
             <form>
-                <label htmlFor="postTitle">Post Title:</label>
+                <label htmlFor="name">Name:</label>
                 <input
                     type="text"
-                    id="postTitle"
-                    name="postTitle"
-                    placeholder="What's on your mind?"
-                    value={title}
-                    onChange={onTitleChanged}
+                    id="name"
+                    name="name"
+                    placeholder="Name"
+                    value={name}
+                    onChange={onNameChanged}
                 />
-                <label htmlFor="postAuthor">Author:</label>
-                <select id="postAuthor" value={userId} onChange={onAuthorChanged}>
-                    <option value=""></option>
-                    {usersOptions}
-                </select>
-                <label htmlFor="postContent">Content:</label>
-                <textarea
-                    id="postContent"
-                    name="postContent"
-                    value={content}
-                    onChange={onContentChanged}
+                <label htmlFor="username">Username:</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Username"
+                    value={username}
+                    onChange={onUsernameChanged}
+                />
+                <label htmlFor="email">Email:</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={onEmailChanged}
                 />
                 <div
                     style={{
@@ -71,8 +69,8 @@ export const AddPostForm = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <button type="button" onClick={onSavePostClicked} disabled={!canSave}>
-                        Save Post
+                    <button type="button" onClick={onSaveUserClicked} disabled={!canSave}>
+                        Save User
                     </button>
                     {spinner}
                 </div>

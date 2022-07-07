@@ -14,10 +14,40 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         return usersAdapter.setAll(initialState, res)
       },
     }),
+    getUser: builder.query({
+      query: (userId) => `/users/${userId}`,
+      providesTags: (result, error, arg) => [{ type: 'User', id: arg }],
+    }),
+    addNewUser: builder.mutation({
+      query: (initialUser) => ({
+        url: '/users',
+        method: 'POST',
+        body: initialUser,
+      }),
+      transformResponse: (res) => {
+        return usersAdapter.addOne(initialState, res)
+      }
+    }),
+    editUser: builder.mutation({
+      query: (user) => ({
+        url: `users/${user.id}`,
+        method: 'PATCH',
+        body: user,
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.id }],
+    }),
+    deleteUser: builder.mutation({
+      query: (userId) => ({
+        url: `users/${userId}`,
+        method: 'DELETE',
+        body: undefined,
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg }],
+    }),
   }),
 })
 
-export const { useGetUsersQuery } = extendedApiSlice
+export const { useGetUsersQuery, useGetUserQuery, useAddNewUserMutation, useEditUserMutation, useDeleteUserMutation } = extendedApiSlice
 
 // Calling `someEndpoint.select(someArg)` generates a new selector that will return
 // the query result object for a query with those parameters.

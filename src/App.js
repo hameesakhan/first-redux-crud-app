@@ -10,6 +10,9 @@ import './App.css';
 
 import { UsersList } from './features/users/UsersList'
 import { UserPage } from './features/users/UserPage'
+import { UserCreate } from './features/users/UserCreate';
+import { UserEdit } from './features/users/UserEdit';
+
 import { PostsList } from './features/posts/PostsList';
 import { PostCreate } from './features/posts/PostCreate';
 import { PostEdit } from './features/posts/PostEdit';
@@ -24,9 +27,9 @@ function App() {
           <div className="App">
             <Switch>
               <Route exact path="/users" element={<UsersList />} />
-              <Route exact path="/users/create" element={<UserPage />} />
+              <Route exact path="/users/create" element={<UserCreate />} />
               <Route exact path="/users/:userId" element={<UserPage />} />
-              <Route exact path="/users/:userId/edit" element={<UserPage />} />
+              <Route exact path="/users/:userId/edit" element={<UserEdit />} />
 
               <Route exact path="/posts" element={<PostsList />} />
               <Route exact path="/posts/create" element={<PostCreate />} />
